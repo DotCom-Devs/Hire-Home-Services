@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body_block %}
+
+  <div class="jumbotron">
+
+
+      <form enctype="multipart/form-data" method="post" id ='consumerForm' data-areas-url="{% url 'ajax_load_cities' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit"  value="Update Profile">
+      </form>
+
+  </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  
+    $("#id_city").change(function () {
+
+        const url = $("#consumerForm").attr("data-areas-url");  // get the url of the `load_cities` view
+
+        const cityId = $(this).val();  // get the selected country ID from the HTML input
+
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+            data: {
+                'city_id': cityId       // add the country id to the GET parameters
+            },
+            success: function (data) {   // `data` is the return of the `load_cities` view function
+
+                $("#id_area").html(data);  // replace the contents of the city input with the data that came from the server
+                /*
+
+                let html_data = '<option value="">---------</option>';
+                data.forEach(function (city) {
+                    html_data += `<option value="${city.id}">${city.name}</option>`
+                });
+                console.log(html_data);
+                $("#id_city").html(html_data);
+
+                */
+            }
+        });
+
+    });
+</script>
+
+{% endblock %}

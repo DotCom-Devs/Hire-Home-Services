@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body_block %}
+
+  <div class="jumbotron">
+    <img src="{{ user_profile.plumber.profile_pic.url }}" alt="Not Found" style='height:220px'>
+    <h3>Name: {{ user_profile.first_name }} {{ user_profile.last_name}}</h3>
+    <h4>Email: {{ user_profile.email }}</h4>
+    <h4>Phone: {{ user_profile.plumber.phone }}</h4>
+    <h4>City: {{user_profile.plumber.city }} </h4>
+    <h4>Area: {{user_profile.plumber.area}}</h4>
+    <h4>Address: {{user_profile.plumber.address}}</h4>
+    <h4>Avaliable from :{{user_profile.plumber.timeopen}} to {{user_profile.plumber.timeclose}}</h4>
+    <h4>Avaliable : {% if user_profile.plumber.is_avaliable %} Yes  {% else %} No {% endif %}</h4>
+
+  </div>
+  {% if user == user_profile %}
+  <a href="{% url 'plumber:updateprofile' %}" class="btn btn-warning">Update Profile </a>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body_block %}
+
+  <div class="jumbotron">
+    <img src="{{ user_profile.consumer.profile_pic.url }}" alt="Not Found" style='height:220px'>
+    <h3>Name: {{ user_profile.first_name }} {{ user_profile.last_name}}</h3>
+    <h4>Email: {{ user_profile.email }}</h4>
+    <h4>Phone: {{ user_profile.consumer.phone }}</h4>
+    <h4>City: {{user_profile.consumer.city }} </h4>
+    <h4>Area: {{user_profile.consumer.area}}</h4>
+    <h4>Address: {{user_profile.consumer.address}}</h4>
+  </div>
+  <a href="{% url 'consumer:updateprofile' %}" class="btn btn-warning">Update Profile </a>
+{% endblock %}
