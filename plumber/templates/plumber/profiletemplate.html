@@ -3,7 +3,12 @@
 {% block body_block %}
 
   <div class="jumbotron">
+    {% if user_profile.plumber.profile_pic %}
     <img src="{{ user_profile.plumber.profile_pic.url }}" alt="Not Found" style='height:220px'>
+    {% else  %}
+    <img src="{% static 'images/profile2.png' %}" alt="Not Found" style='height:220px'>
+    {% endif %}
+
     <h3>Name: {{ user_profile.first_name }} {{ user_profile.last_name}}</h3>
     <h4>Email: {{ user_profile.email }}</h4>
     <h4>Phone: {{ user_profile.plumber.phone }}</h4>

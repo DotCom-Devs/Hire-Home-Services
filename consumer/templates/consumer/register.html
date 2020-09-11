@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load bootstrap3 %}
 {% block body_block %}
 
   <div class="jumbotron">
@@ -7,7 +8,7 @@
 
       <form enctype="multipart/form-data" method="post" id ='consumerForm' data-areas-url="{% url 'ajax_load_cities' %}">
         {% csrf_token %}
-        {{ form.as_p }}
+        {% bootstrap_form form %}
         <input type="submit"  value="Update Profile">
       </form>
 
@@ -15,11 +16,11 @@
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
-  
+
     $("#id_city").change(function () {
 
         const url = $("#consumerForm").attr("data-areas-url");  // get the url of the `load_cities` view
-
+        console.log(url)
         const cityId = $(this).val();  // get the selected country ID from the HTML input
 
         $.ajax({                       // initialize an AJAX request

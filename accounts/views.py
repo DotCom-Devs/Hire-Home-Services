@@ -31,7 +31,7 @@ def registerPage(request):
 
 			messages.success(request, 'Account was created for ' + username)
 
-			return redirect('accounts:user_login')
+			return HttpResponseRedirect(reverse('accounts:user_login'))
 
 
 	context = {'form':form}
@@ -55,7 +55,8 @@ def serviceRegisterPage(request):
 
 			group = Group.objects.get_or_create(name =service_type)[0]
 			user.groups.add(group)
-			return redirect('accounts:user_login')
+			return HttpResponseRedirect(reverse('accounts:user_login'))
+
 
 
 	context = {'form':form,'typeservice':type}
@@ -72,6 +73,8 @@ def loginPage(request):
 
 		if user is not None:
 			login(request, user)
+			#if 'consumer' in (group.name for group in user.groups.all()):
+
 			return redirect('accounts:index')
 		else:
 			messages.info(request, 'Username OR password is incorrect')

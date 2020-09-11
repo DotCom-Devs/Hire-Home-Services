@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body_block %}
+
+  <div class="jumbotron">
+
+    <form enctype="multipart/form-data" method="post" id ='plumberForm' data-areas-url="{% url 'ajax_load_cities' %}">
+      {% csrf_token %}
+      {{ form }}
+      <input type="submit"  name = 'filter' value="submit">
+    </form>
+
+    {% if plumber_same_area %}
+    <h3>List of plumbers in {{user_area }},{{ user_city }}</h3>
+    <ul>
+      {% for plumber in plumber_same_area %}
+      <li><a href="{% url 'plumber:profile' pk=plumber.user.pk %}">{{plumber.user.first_name}} {{plumber.user.last_name}} Avaliable from :{{plumber.timeopen}} to {{plumber.timeclose}} {{ plumber.phone }}</a></li>
+      {% endfor %}
+    </ul>
+
+    {% else %}
+    <h4>No Plumber Found in {{user_area }},{{ user_city }}</h4>
+    {% endif %}
+
+    {% if plumber_same_city %}
+    <h3>List of plumbers in {{ user_city }} </h3>
+    <ul>
+      {% for plumber in plumber_same_city %}
+      <li><a href="{% url 'plumber:profile' pk=plumber.user.pk %}">{{plumber.user.first_name}} {{plumber.user.last_name}} Avaliable from :{{plumber.timeopen}} to {{plumber.timeclose}} {{ plumber.phone }}  {{plumber.area}}</a></li>
+      {% endfor %}
+    </ul>
+
+    {% else %}
+    <h4>No Plumber Found in {{ user_city }}</h4>
+    {% endif %}
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+  $("#id_city").change(function () {
+    console.log('non non non')
+      const url = $("#plumberForm").attr("data-areas-url");  // get the url of the `load_cities` view
+
+      const cityId = $(this).val();  // get the selected country ID from the HTML input
+      console.log(url)
+      $.ajax({                       // initialize an AJAX request
+          url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+          data: {
+              'city_id': cityId       // add the country id to the GET parameters
+          },
+          success: function (data) {   // `data` is the return of the `load_cities` view function
+
+              $("#id_area").html(data);  // replace the contents of the city input with the data that came from the server
+
+          }
+      });
+
+  });
+</script>
+
+{% endblock %}

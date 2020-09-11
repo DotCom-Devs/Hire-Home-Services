@@ -25,6 +25,7 @@ def allowed_usersprofile(allowed_roles=[]):
 			if len(set(groups)&set(allowed_roles))!=0:
 				return view_func(request, *args, **kwargs)
 			else:
-				return redirect(groups[0]+':profile')
+				#return redirect(groups[0]+':profile')
+				return redirect( groups[0]+':home' )
 		return wrapper_func
 	return decorator

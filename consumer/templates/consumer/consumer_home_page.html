@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body_block %}
+
+  <div class="jumbotron">
+    <ul>
+      {% for service in services %}
+        <li><a href="{% url service %}">{{service|cut:':home'|upper}}</a></li>
+      {% endfor %}
+    </ul>
+
+  </div>
+
+{% endblock %}

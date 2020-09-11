@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load bootstrap3 %}
 {% block body_block %}
 
   <div class="jumbotron">
@@ -14,8 +15,8 @@
 
       <form enctype="multipart/form-data" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        {{ typeservice.as_p}}
+        {% bootstrap_form form %}
+        {% bootstrap_form typeservice %}
         <input type="submit"  value="Register">
       </form>
     {% endif %}

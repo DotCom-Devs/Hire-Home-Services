@@ -30,3 +30,24 @@ class PlumberProfileForm(forms.ModelForm):
                 pass  # invalid input from the client; ignore and fallback to empty City queryset
         elif self.instance.pk:
             self.fields['area'].queryset = self.instance.city.area_set.order_by('name')
+
+
+
+class plumberFilter(forms.Form):
+    city = forms.ChoiceField(label='City :',required=False)
+    area = forms.ChoiceField(label='Area :',required=False)
+    sort_by = forms.ChoiceField(label='Sort By :',required=False)
+
+    def __init__(self,*args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['sort_by'].choices = [('none','----'),('inc','Price Low to High'),('dec','Price High to Low')]
+        self.fields['city'].choices = [('none','----')]+[(city.id,city.name) for city in City.objects.all()]
+        self.fields['area'].queryset = Area.objects.none()
+
+        if 'city' in self.data:
+            try:
+                city_id = int(self.data.get('city'))
+                self.fields['area'].queryset = Area.objects.filter(city_id=city_id).order_by('name')
+            except (ValueError, TypeError):
+                print('error')
+                pass  # invalid input from the client; ignore and fallback to empty City queryset

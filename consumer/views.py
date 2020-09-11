@@ -30,10 +30,10 @@ def createBasicProfile(request):
             profile.user = request.user
 
             profile.save()
-            lastUpdateEntry = request.user.lastupdated
-            lastUpdateEntry.update_date=timezone.now().date()
-            lastUpdateEntry.save()
-            return redirect('home')
+            #lastUpdateEntry = request.user.lastupdated
+            #lastUpdateEntry.update_date=timezone.now().date()
+            #lastUpdateEntry.save()
+            return HttpResponseRedirect(reverse('home'))
     context = {'form':form}
     return render(request, 'consumer/register.html', context)
 
@@ -51,10 +51,10 @@ def updateBasicProfile(request):
             profile.user = request.user
 
             profile.save()
-            lastUpdateEntry = request.user.lastupdated
-            lastUpdateEntry.update_date=timezone.now().date()
-            lastUpdateEntry.save()
-            return redirect('home')
+            #lastUpdateEntry = request.user.lastupdated
+            #lastUpdateEntry.update_date=timezone.now().date()
+            #lastUpdateEntry.save()
+            return  HttpResponseRedirect(reverse('home'))
     context = {'form':form}
     return render(request, 'consumer/register.html', context)
 
@@ -75,7 +75,7 @@ def crateOrUpdateBasicProfile(request):
             lastUpdateEntry = request.user.lastupdated
             lastUpdateEntry.update_date=timezone.now().date()
             lastUpdateEntry.save()
-            return redirect('home')
+            return HttpResponseRedirect(reverse('home'))
     context = {'form':form}
     return render(request, 'consumer/register.html', context)
 
@@ -84,3 +84,9 @@ def crateOrUpdateBasicProfile(request):
 def viewProfile(request):
     user_profile = request.user
     return render(request,'consumer/profiletemplate.html',{'user_profile':user_profile})
+
+@login_required
+@allowed_usersprofile(['consumer',])
+def homePageConsumers(request):
+    applist = ['plumber:home',]
+    return render(request,'consumer/consumer_home_page.html',{'services':applist})

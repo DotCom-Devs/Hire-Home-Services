@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body_block %}
+
+  <div  class="jumbotron">
+    <h2>{{plumber.user.first_name}} {{plumber.user.last_name}}</h2>
+    <div style="display:inline-block">
+    <label>Available ?</label>
+    <label class="switch">
+      {% if plumber.is_avaliable %}
+        <input type="checkbox" id="checkbox" value="{{plumber.is_available}}" checked >
+      {% else %}
+        <input type="checkbox" id="checkbox" value="{{plumber.is_available}}" >
+      {% endif %}
+      <span class="slider round"></span>
+    </label>
+    </div>
+  </div >
+
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script >
+  <script type="text/javascript">
+  $(document).ready(function() {
+      $('#checkbox').change(function() {
+          $.post("{% url 'plumber:toggle' %}", {
+              id: '{{plumber.id}}',
+              isworking: this.checked,
+              csrfmiddlewaretoken: '{{ csrf_token }}'
+          });
+      });
+  });
+
+  </script>
+{% endblock %}
