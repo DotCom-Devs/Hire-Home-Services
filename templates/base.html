@@ -13,11 +13,12 @@
     <nav class='navbar navbar-default navbar-static-top'>
       <div class="container">
         <ul class='nav navbar-nav'>
-          <li><a class="navbar-brand" href="">Django</a></li>
+          <li><a class="navbar-brand" href="{% url 'home' %}">Home</a></li>
           <li><a class='navbar-link' href="{% url 'admin:index' %}">Admin</a></li>
           {% if user.is_authenticated %}
             <li><a class='navbar-link' href="{% url 'accounts:logout' %}">Logout</a></li>
-            <li><a class='navbar-link' href="">Profile</a></li>
+            <li><a class='navbar-link' href="{% url 'accounts:profile' %}">Profile</a></li>
+            <li><a class='navbar-link' href="{% url 'accounts:updateprofile' %}">Update Profile</a></li>
           {% else %}
             <li><a class='navbar-link' href="{% url 'accounts:user_login' %}">Login</a></li>
             <li><a class='navbar-link' href="{% url 'accounts:register' %}">Register</a></li>

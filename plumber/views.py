@@ -4,14 +4,14 @@ from .forms import PlumberProfileForm, plumberFilter
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse,HttpResponseRedirect
 from django.utils import timezone
-from .decorators import allowed_users
+from .decorators import allowed_users,check_profile_exist
 from django.contrib.auth.models import User
 # Create your views here.
 
 #@unauthenticated_user
 
 @login_required
-@allowed_users(['plumber',])
+@allowed_users(['plumber',],'updateprofile')
 def createOrUpdateProfile(request):
     if request.user.lastupdated.update_date:
         return updateBasicProfile(request)
@@ -61,40 +61,54 @@ def updateBasicProfile(request):
 
 
 @login_required
+@check_profile_exist
 def viewProfile(request,pk=None):
+    user_groups = list(group.name for group in request.user.groups.all()) #groups name for requesting user
     if pk!=None:
-
+        if 'consumer' not in user_groups:
+            return redirect( user_groups[0]+':profile')
         user_profile = get_object_or_404(User,pk=pk)
-        if 'plumber' not in (group.name for group in user_profile.groups.all()):
-            return HttpResponse('Not Exist')
+        if 'plumber' not in (group.name for group in user_profile.groups.all()): #groups name for pk user
+            return render(request,'unauthorised_access.html',{'message':'Not Exist'})
     else:
-        if 'plumber' not in (group.name for group in request.user.groups.all()):
-            return HttpResponse('Not Exist')
+        if 'plumber' not in user_groups:
+            return redirect( user_groups[0]+':profile')
         user_profile = request.user
     return render(request,'plumber/profiletemplate.html',{'user_profile':user_profile})
 
 
 
 @login_required
+@check_profile_exist
+@allowed_users(['plumber'],'home')
 def plumberHomePage(request):
     context={
         'plumber':request.user.plumber
     }
     return render(request,'plumber/plumber_home_page.html',context)
 
+
 @login_required
 @allowed_users(['plumber',])
 def toggle(request):
+    if request.user.is_authenticated==False:
+        return HttpResponse('Not Authorised')
     w = PlumberProfile.objects.get(id=request.POST['id'])
     print('hell    ',request.POST['isworking'])
     w.is_avaliable = request.POST['isworking'] == 'true'
     w.save()
-    return HttpResponse('success')
+    if w.is_avaliable:
+        return HttpResponse('Status :  Avaliable')
+    else:
+        return HttpResponse('Status :  Not Avaliable')
+
 
 
 
 
 @login_required
+@check_profile_exist
+@allowed_users(['consumer'])
 def hirePlumber(request):
     form = plumberFilter()
     if request.method=='POST':

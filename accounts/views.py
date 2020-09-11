@@ -73,7 +73,8 @@ def loginPage(request):
 
 		if user is not None:
 			login(request, user)
-			#if 'consumer' in (group.name for group in user.groups.all()):
+			if request.user.is_authenticated:
+				return redirect(request.user.groups.all()[0].name+':home')
 
 			return redirect('accounts:index')
 		else:
@@ -89,16 +90,23 @@ def logoutUser(request):
 	return HttpResponseRedirect(reverse('accounts:user_login'))
 
 def index(request):
-    return render(request,'accounts/index.html')
+	if request.user.is_authenticated:
+		return redirect(request.user.groups.all()[0].name+':home')
+	return render(request,'accounts/index.html')
 
 @login_required
 def updateProfile(request):
 
-	if len(request.user.groups.all())!=0:
+	user_groups =request.user.groups.all()
+	if len(user_groups)!=0:
+		return redirect(user_groups[0].name+':updateprofile')
+	else:
+		return redirect('home')
 
-		if request.user.groups.all()[0].name=='consumer':
-			return redirect('consumer:updateprofile')
-		elif request.user.groups.all()[0].name == 'plumber':
-			return redirect('plumber:updateprofile')
+@login_required
+def profile(request):
+	user_groups =request.user.groups.all()
+	if len(user_groups)!=0:
+		return redirect(user_groups[0].name+':profile')
 	else:
 		return redirect('home')

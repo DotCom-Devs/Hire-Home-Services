@@ -5,11 +5,18 @@
   <div  class="jumbotron">
     <h2>{{plumber.user.first_name}} {{plumber.user.last_name}}</h2>
     <div style="display:inline-block">
-    <label>Available ?</label>
+    <label>Available </label>
+    {% if plumber.is_avaliable %}
+      <h3 id='acitve_status'>Status :  Avaliable</h3>
+    {% else %}
+      <h3 id='acitve_status'>Status :  Not Avaliable</h3>
+    {% endif %}
     <label class="switch">
       {% if plumber.is_avaliable %}
+
         <input type="checkbox" id="checkbox" value="{{plumber.is_available}}" checked >
       {% else %}
+
         <input type="checkbox" id="checkbox" value="{{plumber.is_available}}" >
       {% endif %}
       <span class="slider round"></span>
@@ -27,6 +34,10 @@
               id: '{{plumber.id}}',
               isworking: this.checked,
               csrfmiddlewaretoken: '{{ csrf_token }}'
+          },
+          function(data){
+            
+            $("#acitve_status").text(data);
           });
       });
   });
