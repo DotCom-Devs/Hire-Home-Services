@@ -34,20 +34,32 @@ class PlumberProfileForm(forms.ModelForm):
 
 
 class plumberFilter(forms.Form):
-    city = forms.ChoiceField(label='City :',required=False)
-    area = forms.ChoiceField(label='Area :',required=False)
+    city = forms.ModelChoiceField(label='City :',required=False,queryset=City.objects.all())
+    area = forms.ModelChoiceField(label='Area :',required=False,queryset = Area.objects.all())
     sort_by = forms.ChoiceField(label='Sort By :',required=False)
 
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['sort_by'].choices = [('none','----'),('inc','Price Low to High'),('dec','Price High to Low')]
-        self.fields['city'].choices = [('none','----')]+[(city.id,city.name) for city in City.objects.all()]
-        self.fields['area'].queryset = Area.objects.none()
+        #self.fields['city'].choices = [('none','----')]+[(city.id,city.name) for city in City.objects.all()]
+        #self.fields['area'].
 
         if 'city' in self.data:
             try:
-                city_id = int(self.data.get('city'))
-                self.fields['area'].queryset = Area.objects.filter(city_id=city_id).order_by('name')
+                city_id = (self.data.get('city'))
+                if city_id!='':
+                    city_id = int(city_id)
+                    self.fields['area'].queryset = Area.objects.filter(city_id=city_id).order_by('name')
             except (ValueError, TypeError):
                 print('error')
+                raise forms.ValidationError('select valid options')
                 pass  # invalid input from the client; ignore and fallback to empty City queryset
+        else:
+            self.fields['area'].queryset = Area.objects.all()
+
+    def clean(self):
+        all_clean_data = super().clean()
+        if all_clean_data['city']==None and all_clean_data['area']:
+            raise forms.ValidationError('Select Valid City')
+        elif all_clean_data['city']==None and all_clean_data['area']==None and all_clean_data['sort_by']=='none':
+            raise forms.ValidationError('No options selected')

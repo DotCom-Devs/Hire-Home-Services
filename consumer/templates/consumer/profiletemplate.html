@@ -2,7 +2,7 @@
 {% load static %}
 {% block body_block %}
 
-  <div class="jumbotron">
+  <!--<div class="jumbotron">
     {% if user_profile.consumer.profile_pic %}
     <img src="{{ user_profile.consumer.profile_pic.url }}" alt="Not Found" style='height:220px'>
     {% else  %}
@@ -15,5 +15,67 @@
     <h4>Area: {{user_profile.consumer.area}}</h4>
     <h4>Address: {{user_profile.consumer.address}}</h4>
   </div>
-  <a href="{% url 'consumer:updateprofile' %}" class="btn btn-warning">Update Profile </a>
+  <a href="{% url 'consumer:updateprofile' %}" class="btn btn-warning">Update Profile </a>-->
+
+  <div class="container">
+        <div class="row">
+
+          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+
+
+            <div class="panel panel-info">
+              <div class="panel-heading">
+                <h3 class="panel-title">User Profile</h3>
+              </div>
+              <div class="panel-body">
+                <div class="row">
+                  {% if user_profile.plumber.profile_pic %}
+                  <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="{{ user_profile.consumer.profile_pic.url }}" class="img-circle img-responsive"> </div>
+                  {% else  %}
+                  <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="{% static 'images/profile2.png' %}" class="img-circle img-responsive"> </div>
+                  {% endif %}
+                  <div class=" col-md-9 col-lg-9 ">
+                    <table class="table table-user-information">
+                      <tbody>
+                        <tr>
+                          <td>Name</td>
+                          <td>{{ user_profile.first_name|upper }} {{ user_profile.last_name|upper}}</td>
+                        </tr>
+
+                        <tr>
+                          <td>Area</td>
+                          <td>{{user_profile.consumer.area|upper}}</td>
+                        </tr>
+                        <tr>
+                          <td>City</td>
+                          <td>{{user_profile.consumer.city|upper}}</td>
+                        </tr>
+                        <tr>
+                          <td>Address</td>
+                          <td>{{user_profile.consumer.address|upper}}</td>
+                        </tr>
+                        <tr>
+                          <td>Email</td>
+                          <td><a href="mailto:{{ user_profile.email }}">{{ user_profile.email }}</a></td>
+                        </tr>
+                        <tr>
+                          <td>Phone Number</td>
+                          <td>{{ user_profile.consumer.phone }}</td>
+
+                        </tr>
+
+                      </tbody>
+                    </table>
+
+                    <a href="{% url 'consumer:updateprofile' %}" class="btn btn-primary">Edit Profile</a>
+
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
 {% endblock %}

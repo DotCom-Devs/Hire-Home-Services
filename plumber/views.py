@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render,redirect,get_object_or_404,reverse
 from .models import PlumberProfile
 from .forms import PlumberProfileForm, plumberFilter
 from django.contrib.auth.decorators import login_required
@@ -111,22 +111,77 @@ def toggle(request):
 @allowed_users(['consumer'])
 def hirePlumber(request):
     form = plumberFilter()
+    show_area = True
+    orderfilter=False
+    plumber_list_same_area = []
+    plumber_list_diff_area = []
+    plumber_list=[]
+    user_city = ''
+    user_area = ''
     if request.method=='POST':
         form = plumberFilter(data=request.POST)
         if form.is_valid():
-            print(form.cleaned_data['city'])
+            city=form.cleaned_data['city']
+            area=form.cleaned_data['area']
+            order=form.cleaned_data['sort_by']
+            print(city,area,order)
+            if order in ('inc','dec'):
+                orderfilter=True
+                if order=='inc':
+                    order = 'charges'
+                else:
+                    order = '-charges'
+            if area==None and city:
+                show_area = False
+                plumber_list = PlumberProfile.objects.filter(city=city).filter(is_avaliable=True)
+                user_city = city.name
+                if orderfilter:
+                    plumber_list = plumber_list.order_by(order)
+            elif area and city:
+                plumber_list = PlumberProfile.objects.filter(city=city).filter(is_avaliable=True)
+                plumber_list_same_area = plumber_list.filter(area=area)
+                plumber_list_diff_area = plumber_list.exclude(area=area)
+                user_city = city.name
+                user_area = area.name
+                if orderfilter:
+                    plumber_list_same_area = plumber_list_same_area.order_by(order)
+                    plumber_list_diff_area = plumber_list_diff_area.order_by(order)
+            elif area==None and city==None and orderfilter:
+                user_data = request.user.consumer
+                user_city = user_data.city
+                user_area = user_data.area
+
+                plumber_list = PlumberProfile.objects.filter(city=user_city).filter(is_avaliable=True)
+                plumber_list_same_area = plumber_list.filter(area=user_area)
+                plumber_list_diff_area = plumber_list.exclude(area=user_area)
+
+                if orderfilter:
+                    plumber_list_same_area = plumber_list_same_area.order_by(order)
+                    plumber_list_diff_area = plumber_list_diff_area.order_by(order)
+        else:
+            user_data = request.user.consumer
+            user_city = user_data.city
+            user_area = user_data.area
+
+            plumber_list = PlumberProfile.objects.filter(city=user_city).filter(is_avaliable=True)
+            plumber_list_same_area = plumber_list.filter(area=user_area)
+            plumber_list_diff_area = plumber_list.exclude(area=user_area)
 
 
-    user_data = request.user.consumer
-    user_city = user_data.city
-    user_area = user_data.area
+    else:
 
-    plumber_list = PlumberProfile.objects.filter(city=user_city).filter(is_avaliable=True)
-    plumber_list_same_area = plumber_list.filter(area=user_area)
-    plumber_list_diff_area = plumber_list.exclude(area=user_area)
+        user_data = request.user.consumer
+        user_city = user_data.city
+        user_area = user_data.area
+
+        plumber_list = PlumberProfile.objects.filter(city=user_city).filter(is_avaliable=True)
+        plumber_list_same_area = plumber_list.filter(area=user_area)
+        plumber_list_diff_area = plumber_list.exclude(area=user_area)
 
     return render(request,'plumber/plumber_list.html',{'plumber_same_area':plumber_list_same_area,
                                                         'plumber_same_city':plumber_list_diff_area,
                                                         'user_city':user_city,
                                                         'user_area':user_area,
-                                                        'form':form})
+                                                        'form':form,
+                                                        'show_area':show_area,
+                                                        'plumber_list':plumber_list})

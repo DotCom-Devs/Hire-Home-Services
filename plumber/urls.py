@@ -8,5 +8,6 @@ urlpatterns = [
         path('profile/',viewProfile,name='profile'),
         path('hireplumber/',hirePlumber,name='hirePlumber'),
         path('',plumberHomePage,name='home'),
-        path('toggle/',toggle,name='toggle')
+        path('toggle/',toggle,name='toggle'),
+
 ]

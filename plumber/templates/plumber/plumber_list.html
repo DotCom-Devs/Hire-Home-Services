@@ -10,28 +10,122 @@
       <input type="submit"  name = 'filter' value="submit">
     </form>
 
-    {% if plumber_same_area %}
-    <h3>List of plumbers in {{user_area }},{{ user_city }}</h3>
-    <ul>
-      {% for plumber in plumber_same_area %}
-      <li><a href="{% url 'plumber:profile' pk=plumber.user.pk %}">{{plumber.user.first_name}} {{plumber.user.last_name}} Avaliable from :{{plumber.timeopen}} to {{plumber.timeclose}} {{ plumber.phone }}</a></li>
-      {% endfor %}
-    </ul>
+    {% if show_area %}
+      {% if plumber_same_area %}
+      <div class="container">
+          <div class="row">
+              <div class="panel panel-primary filterable">
+                  <div class="panel-heading">
+                      <h3 class="panel-title text-center">List of plumbers in {{user_area|upper }}, {{ user_city|upper }}</h3>
 
+                  </div>
+                  <table class="table">
+                      <thead>
+                          <tr class="filters">
+                              <th><h4>Name</h4></th>
+                              <th><h4>Working Time</h4></th>
+                              <th><h4>Phone</h4></th>
+                              <th><h4>Charges(INR)</h4></th>
+                              <th><h4>View Profile</h4></th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        {% for plumber in plumber_same_area %}
+                        <tr>
+                          <td>{{plumber.user.first_name|upper}} {{plumber.user.last_name|upper}}</td>
+                          <td>{{plumber.timeopen}} to {{plumber.timeclose}}</td>
+                          <td>{{ plumber.phone }}</td>
+                          <td>{{plumber.charges}}</td>
+                          <td><a href="{% url 'plumber:profile' pk=plumber.user.pk %}">Profile</a></td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+
+      {% else %}
+        <h4>No Plumber Found in {{user_area }}, {{ user_city }}</h4>
+      {% endif %}
+
+      {% if plumber_same_city %}
+      <div class="container">
+          <div class="row">
+              <div class="panel panel-primary filterable">
+                  <div class="panel-heading">
+                      <h3 class="panel-title text-center">List of plumbers in {{ user_city|upper }} </h3>
+
+                  </div>
+                  <table class="table">
+                      <thead>
+                          <tr class="filters">
+                              <th><h4>Name</h4></th>
+                              <th><h4>Working Time</h4></th>
+                              <th><h4>Phone</h4></th>
+                              <th><h4>Charges(INR)</h4></th>
+                              <th><h4>View Profile</h4></th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        {% for plumber in plumber_same_city %}
+                        <tr>
+                          <td>{{plumber.user.first_name|upper}} {{plumber.user.last_name|upper}}</td>
+                          <td>{{plumber.timeopen}} to {{plumber.timeclose}}</td>
+                          <td>{{ plumber.phone }}</td>
+                          <td>{{plumber.charges}}</td>
+                          <td><a href="{% url 'plumber:profile' pk=plumber.user.pk %}">Profile</a></td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+
+      {% else %}
+      <h4>No Plumber Found in {{ user_city }}</h4>
+      {% endif %}
     {% else %}
-    <h4>No Plumber Found in {{user_area }},{{ user_city }}</h4>
-    {% endif %}
+      {% if plumber_list %}
+      <div class="container">
+          <div class="row">
+              <div class="panel panel-primary filterable">
+                  <div class="panel-heading">
+                      <h4 class="panel-title text-center" >List of plumbers in {{ user_city|upper }} </h4>
 
-    {% if plumber_same_city %}
-    <h3>List of plumbers in {{ user_city }} </h3>
-    <ul>
-      {% for plumber in plumber_same_city %}
-      <li><a href="{% url 'plumber:profile' pk=plumber.user.pk %}">{{plumber.user.first_name}} {{plumber.user.last_name}} Avaliable from :{{plumber.timeopen}} to {{plumber.timeclose}} {{ plumber.phone }}  {{plumber.area}}</a></li>
-      {% endfor %}
-    </ul>
+                  </div>
+                  <table class="table">
+                      <thead>
+                          <tr class="filters">
+                              <th><h4>Name</h4></th>
+                              <th><h4>Area</h4></th>
+                              <th><h4>Working Time</h4></th>
+                              <th><h4>Phone</h4></th>
+                              <th><h4>Charges(INR)</h4></th>
+                              <th><h4>View Profile</h4></th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        {% for plumber in plumber_list %}
+                        <tr>
+                          <td>{{plumber.user.first_name|upper}} {{plumber.user.last_name|upper}}</td>
+                          <td>{{plumber.area|upper}}</td>
+                          <td>{{plumber.timeopen}} to {{plumber.timeclose}}</td>
+                          <td>{{ plumber.phone }}</td>
+                          <td>{{plumber.charges}}</td>
+                          <td><a href="{% url 'plumber:profile' pk=plumber.user.pk %}">Profile</a></td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
 
-    {% else %}
-    <h4>No Plumber Found in {{ user_city }}</h4>
+      {% else %}
+      <h4>No Plumber Found in {{ user_city }}</h4>
+      {% endif %}
     {% endif %}
 
   </div>
@@ -43,7 +137,7 @@
       const url = $("#plumberForm").attr("data-areas-url");  // get the url of the `load_cities` view
 
       const cityId = $(this).val();  // get the selected country ID from the HTML input
-      console.log(url)
+      //console.log(url)
       $.ajax({                       // initialize an AJAX request
           url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
           data: {
@@ -57,6 +151,11 @@
       });
 
   });
+
+  //console.log($("#id_city").val());
+  if ($("#id_city").val() == "") {
+      const data = '<option value="">---------</option>'
+    $("#id_area").html(data);};
 </script>
 
 {% endblock %}
