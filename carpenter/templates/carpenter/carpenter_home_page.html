@@ -58,30 +58,30 @@
           <div class="media">
               <div class="pull-left" >
 
-                  {% if plumber.profile_pic %}
-                  <img class="media-object dp img-circle" src="{{ plumber.profile_pic.url }}" style="width: 100px;height:100px;">
+                  {% if carpenter.profile_pic %}
+                  <img class="media-object dp img-circle" src="{{ carpenter.profile_pic.url }}" style="width: 100px;height:100px;">
                   {% else  %}
                   <img class="media-object dp img-circle" src="{% static 'images/profile2.png' %}" style="width: 100px;height:100px;">
 
                   {% endif %}
               </div>
               <div class="media-body">
-                  <h4 class="media-heading">{{plumber.user.first_name |upper}} {{plumber.user.last_name |upper}}<small> {{plumber.city|upper}}</small></h4>
-                  <h5>Working as a Plumber</h5>
+                  <h4 class="media-heading">{{carpenter.user.first_name |upper}} {{carpenter.user.last_name |upper}}<small> {{carpenter.city|upper}}</small></h4>
+                  <h5>Working as a Carpenter</h5>
                   <hr style="margin:8px auto">
-                  {% if plumber.is_avaliable %}
+                  {% if carpenter.is_avaliable %}
                     <h4 id='acitve_status'>Status :  Avaliable</h4>
                   {% else %}
                     <h4 id='acitve_status'>Status :  Not Avaliable</h4>
                   {% endif %}
                   <label for="checkbox"><h4>Change Status:</h4></label>
                   <label class="switch">
-                    {% if plumber.is_avaliable %}
+                    {% if carpenter.is_avaliable %}
 
-                      <input type="checkbox" id="checkbox" value="{{plumber.is_available}}" checked >
+                      <input type="checkbox" id="checkbox" value="{{carpenter.is_available}}" checked >
                     {% else %}
 
-                      <input type="checkbox" id="checkbox" value="{{plumber.is_available}}" >
+                      <input type="checkbox" id="checkbox" value="{{carpenter.is_available}}" >
                     {% endif %}
                     <span class="slider round"></span>
                   </label>
@@ -99,8 +99,8 @@
   <script type="text/javascript">
   $(document).ready(function() {
       $('#checkbox').change(function() {
-          $.post("{% url 'plumber:toggle' %}", {
-              id: '{{plumber.id}}',
+          $.post("{% url 'carpenter:toggle' %}", {
+              id: '{{carpenter.id}}',
               isworking: this.checked,
               csrfmiddlewaretoken: '{{ csrf_token }}'
           },

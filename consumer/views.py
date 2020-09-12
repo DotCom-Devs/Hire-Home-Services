@@ -70,5 +70,5 @@ def viewProfile(request):
 @check_profile_exist
 @allowed_users(['consumer',],'home')
 def homePageConsumers(request):
-    applist = ['plumber:hirePlumber','electrician:hireElectrician']
+    applist = ['plumber:hirePlumber','electrician:hireElectrician','carpenter:hireCarpenter',]
     return render(request,'consumer/consumer_home_page.html',{'services':applist})
