@@ -28,6 +28,7 @@ urlpatterns = [
     path('accounts/',include('accounts.urls')),
     path('site/',include('consumer.urls')),
     path('plumber/',include('plumber.urls')),
+    path('electrician/',include('electrician.urls')),
 
 
     path('ajax/load-cities/', load_cities, name='ajax_load_cities'),

@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body_block %}
+<style media="screen">
+  .media
+ {
+     /*box-shadow:0px 0px 4px -2px #000;*/
+     box-shadow: 10px 10px 5px #888888;
+     margin: 20px 0;
+     padding:30px;
+     border: 1px solid #888888;
+     border-radius: 25px;
+ }
+ .dp
+ {
+     border:10px solid #fff;
+     transition: all 0.2s ease-in-out;
+ }
+ .dp:hover
+ {
+     border:2px solid #fff;
+     transform:rotate(360deg);
+     -ms-transform:rotate(360deg);
+     -webkit-transform:rotate(360deg);
+     /*-webkit-font-smoothing:antialiased;*/
+ }
+</style>
+
+  <!--<div  class="jumbotron">
+    <h2>{{plumber.user.first_name}} {{plumber.user.last_name}}</h2>
+    <div style="display:inline-block">
+    <label>Available </label>
+    {% if plumber.is_avaliable %}
+      <h3 id='acitve_status'>Status :  Avaliable</h3>
+    {% else %}
+      <h3 id='acitve_status'>Status :  Not Avaliable</h3>
+    {% endif %}
+    <label class="switch">
+      {% if plumber.is_avaliable %}
+
+        <input type="checkbox" id="checkbox" value="{{plumber.is_available}}" checked >
+      {% else %}
+
+        <input type="checkbox" id="checkbox" value="{{plumber.is_available}}" >
+      {% endif %}
+      <span class="slider round"></span>
+    </label>
+    </div>
+  </div >-->
+
+
+
+  <div class="row">
+
+      <br>
+      <br>
+      <div class="col-lg-6 col-md-offset-3 ">
+          <div class="media">
+              <div class="pull-left" >
+
+                  {% if user_profile.electrician.profile_pic %}
+                  <img class="media-object dp img-circle" src="{{ user_profile.electrician.profile_pic.url }}" style="width: 100px;height:100px;">
+                  {% else  %}
+                  <img class="media-object dp img-circle" src="{% static 'images/profile2.png' %}" style="width: 100px;height:100px;">
+
+                  {% endif %}
+              </div>
+              <div class="media-body">
+                  <h4 class="media-heading">{{electrician.user.first_name |upper}} {{electrician.user.last_name |upper}}<small> {{electrician.city|upper}}</small></h4>
+                  <h5>Working as a Electrician</h5>
+                  <hr style="margin:8px auto">
+                  {% if electrician.is_avaliable %}
+                    <h4 id='acitve_status'>Status :  Avaliable</h4>
+                  {% else %}
+                    <h4 id='acitve_status'>Status :  Not Avaliable</h4>
+                  {% endif %}
+                  <label for="checkbox"><h4>Change Status:</h4></label>
+                  <label class="switch">
+                    {% if electrician.is_avaliable %}
+
+                      <input type="checkbox" id="checkbox" value="{{electrician.is_available}}" checked >
+                    {% else %}
+
+                      <input type="checkbox" id="checkbox" value="{{electrician.is_available}}" >
+                    {% endif %}
+                    <span class="slider round"></span>
+                  </label>
+              </div>
+          </div>
+
+      </div>
+
+
+
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script >
+  <script type="text/javascript">
+  $(document).ready(function() {
+      $('#checkbox').change(function() {
+          $.post("{% url 'electrician:toggle' %}", {
+              id: '{{electrician.id}}',
+              isworking: this.checked,
+              csrfmiddlewaretoken: '{{ csrf_token }}'
+          },
+          function(data){
+
+            $("#acitve_status").text(data);
+          });
+      });
+  });
+
+  </script>
+{% endblock %}

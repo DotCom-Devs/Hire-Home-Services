@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'consumer.apps.ConsumerConfig',
     'plumber.apps.PlumberConfig',
     'bootstrap3',
+    'electrician.apps.ElectricianConfig',
 ]
 
 MIDDLEWARE = [

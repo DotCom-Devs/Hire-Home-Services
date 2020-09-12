@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body_block %}
+
+  <div class="jumbotron">
+
+    <form enctype="multipart/form-data" method="post" id ='electricianForm' data-areas-url="{% url 'ajax_load_cities' %}" class="form-inline">
+      {% csrf_token %}
+      {{ form }}
+      <input type="submit"  name = 'filter' value="submit" class="form-control">
+    </form>
+    <br>
+    {% if show_area %}
+      {% if electrician_same_area %}
+      <div class="container">
+          <div class="row">
+              <div class="panel panel-primary filterable">
+                  <div class="panel-heading">
+                      <h3 class="panel-title text-center">List of Electricians in {{user_area|upper }}, {{ user_city|upper }}</h3>
+
+                  </div>
+                  <table class="table">
+                      <thead>
+                          <tr class="filters">
+                              <th><h4>Name</h4></th>
+                              <th><h4>Working Time</h4></th>
+                              <th><h4>Phone</h4></th>
+                              <th><h4>Charges(INR)</h4></th>
+                              <th><h4>View Profile</h4></th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        {% for electrician in electrician_same_area %}
+                        <tr>
+                          <td>{{electrician.user.first_name|upper}} {{electrician.user.last_name|upper}}</td>
+                          <td>{{electrician.timeopen}} to {{electrician.timeclose}}</td>
+                          <td>{{ electrician.phone }}</td>
+                          <td>{{electrician.charges}}</td>
+                          <td><a href="{% url 'electrician:profile' pk=electrician.user.pk %}">Profile</a></td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+
+      {% else %}
+        <h4>No Electrician Found in {{user_area }}, {{ user_city }}</h4>
+      {% endif %}
+
+      {% if electrician_same_city %}
+      <div class="container">
+          <div class="row">
+              <div class="panel panel-primary filterable">
+                  <div class="panel-heading">
+                      <h3 class="panel-title text-center">List of Electricians in {{ user_city|upper }} </h3>
+
+                  </div>
+                  <table class="table">
+                      <thead>
+                          <tr class="filters">
+                              <th><h4>Name</h4></th>
+                              <th><h4>Area</h4></th>
+                              <th><h4>Working Time</h4></th>
+                              <th><h4>Phone</h4></th>
+                              <th><h4>Charges(INR)</h4></th>
+                              <th><h4>View Profile</h4></th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        {% for electrician in electrician_same_city %}
+                        <tr>
+                          <td>{{electrician.user.first_name|upper}} {{electrician.user.last_name|upper}}</td>
+                          <td>{{electrician.area|upper}}</td>
+                          <td>{{electrician.timeopen}} to {{electrician.timeclose}}</td>
+                          <td>{{ electrician.phone }}</td>
+                          <td>{{electrician.charges}}</td>
+                          <td><a href="{% url 'electrician:profile' pk=electrician.user.pk %}">Profile</a></td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+
+      {% else %}
+      <h4>No Electrician Found in {{ user_city }}</h4>
+      {% endif %}
+    {% else %}
+      {% if electrician_list %}
+      <div class="container">
+          <div class="row">
+              <div class="panel panel-primary filterable">
+                  <div class="panel-heading">
+                      <h4 class="panel-title text-center" >List of Electricians in {{ user_city|upper }} </h4>
+
+                  </div>
+                  <table class="table">
+                      <thead>
+                          <tr class="filters">
+                              <th><h4>Name</h4></th>
+                              <th><h4>Area</h4></th>
+                              <th><h4>Working Time</h4></th>
+                              <th><h4>Phone</h4></th>
+                              <th><h4>Charges(INR)</h4></th>
+                              <th><h4>View Profile</h4></th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        {% for electrician in electrician_list %}
+                        <tr>
+                          <td>{{electrician.user.first_name|upper}} {{electrician.user.last_name|upper}}</td>
+                          <td>{{electrician.area|upper}}</td>
+                          <td>{{electrician.timeopen}} to {{electrician.timeclose}}</td>
+                          <td>{{ electrician.phone }}</td>
+                          <td>{{electrician.charges}}</td>
+                          <td><a href="{% url 'electrician:profile' pk=electrician.user.pk %}">Profile</a></td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+
+      {% else %}
+      <h4>No Electrician Found in {{ user_city }}</h4>
+      {% endif %}
+    {% endif %}
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+  $("#id_city").change(function () {
+    console.log('non non non')
+      const url = $("#electricianForm").attr("data-areas-url");  // get the url of the `load_cities` view
+
+      const cityId = $(this).val();  // get the selected country ID from the HTML input
+      //console.log(url)
+      $.ajax({                       // initialize an AJAX request
+          url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+          data: {
+              'city_id': cityId       // add the country id to the GET parameters
+          },
+          success: function (data) {   // `data` is the return of the `load_cities` view function
+
+              $("#id_area").html(data);  // replace the contents of the city input with the data that came from the server
+
+          }
+      });
+
+  });
+
+  //console.log($("#id_city").val());
+  if ($("#id_city").val() == "") {
+      const data = '<option value="">---------</option>'
+    $("#id_area").html(data);};
+</script>
+
+{% endblock %}

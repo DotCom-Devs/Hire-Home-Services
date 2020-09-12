@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render,redirect,get_object_or_404,reverse
 from .models import BasicProfile
 from .forms import BasicProfileForm
 from django.contrib.auth.decorators import login_required
@@ -12,7 +12,7 @@ from .decorators import allowed_users,check_profile_exist
 @login_required
 @allowed_users(['consumer',],'updateprofile')
 def createOrUpdateProfile(request):
-    if request.user.lastupdated.update_date:
+    if request.user.lastupdated.update_date or BasicProfile.objects.filter(user=request.user).exists():
         return updateBasicProfile(request)
     else:
         return createBasicProfile(request)
@@ -70,5 +70,5 @@ def viewProfile(request):
 @check_profile_exist
 @allowed_users(['consumer',],'home')
 def homePageConsumers(request):
-    applist = ['plumber:hirePlumber',]
+    applist = ['plumber:hirePlumber','electrician:hireElectrician']
     return render(request,'consumer/consumer_home_page.html',{'services':applist})
