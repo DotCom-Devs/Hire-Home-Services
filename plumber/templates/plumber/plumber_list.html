@@ -4,12 +4,12 @@
 
   <div class="jumbotron">
 
-    <form enctype="multipart/form-data" method="post" id ='plumberForm' data-areas-url="{% url 'ajax_load_cities' %}">
+    <form enctype="multipart/form-data" method="post" id ='plumberForm' data-areas-url="{% url 'ajax_load_cities' %}" class="form-inline">
       {% csrf_token %}
       {{ form }}
-      <input type="submit"  name = 'filter' value="submit">
+      <input type="submit"  name = 'filter' value="submit" class="form-control">
     </form>
-
+    <br>
     {% if show_area %}
       {% if plumber_same_area %}
       <div class="container">

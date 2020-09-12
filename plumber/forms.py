@@ -44,6 +44,9 @@ class plumberFilter(forms.Form):
         #self.fields['city'].choices = [('none','----')]+[(city.id,city.name) for city in City.objects.all()]
         #self.fields['area'].
 
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
         if 'city' in self.data:
             try:
                 city_id = (self.data.get('city'))
