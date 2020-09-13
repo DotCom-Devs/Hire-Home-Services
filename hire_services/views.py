@@ -10,3 +10,7 @@ def load_cities(request):
     areas = Area.objects.filter(city_id=city_id).all()
     print(areas)
     return render(request, 'accounts/city_dropdown_list_options.html', {'areas': areas})
+
+
+def aboutPage(request):
+    return render(request,'about.html')

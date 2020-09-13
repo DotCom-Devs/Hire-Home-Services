@@ -5,15 +5,16 @@
 
   <div class="jumbotron">
     {% if user.is_authenticated %}
-      <h1>Thanks For Registering!</h1>
+      <h2 class="text-center">Thanks For Registering!</h2>
     {% else %}
-      <h1>Register Here!</h1>
+      <h2 class="text-center">Register Here!<small>as User</small></h2>
+      <hr>
       <h3>Fill Out The Form:</h3>
 
       <form enctype="multipart/form-data" method="post">
         {% csrf_token %}
         {% bootstrap_form form %}
-        <input type="submit"  value="Register">
+        <input type="submit"  value="Register" class="form-control btn-success">
       </form>
     {% endif %}
   </div>

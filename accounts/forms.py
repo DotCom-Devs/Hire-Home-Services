@@ -15,3 +15,7 @@ class CreateUserForm(UserCreationForm):
 class UserTypeForm(forms.Form):
 	CHOICES = [('plumber', 'Plumber'), ('electrician', 'Electrician'),('carpenter','Carpenter')]
 	choice_field = forms.ChoiceField(choices=CHOICES)
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.fields['choice_field'].label = "Profession"

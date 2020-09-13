@@ -49,7 +49,7 @@ def serviceRegisterPage(request):
 			user = form.save()
 			username = form.cleaned_data.get('username')
 
-			messages.success(request, 'Account was created for ' + username)
+			messages.success(request, 'Account created for ' + username)
 			service_type = type_form.cleaned_data['choice_field']
 			print(service_type)
 
@@ -78,7 +78,7 @@ def loginPage(request):
 
 			return redirect('accounts:index')
 		else:
-			messages.info(request, 'Username OR password is incorrect')
+			messages.warning(request, 'Username OR password is incorrect')
 
 	context = {}
 	return render(request, 'accounts/login.html', context)

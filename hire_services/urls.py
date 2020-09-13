@@ -20,10 +20,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-from .views import load_cities
+from .views import load_cities,aboutPage
 
 urlpatterns = [
     path('',index,name='home'),
+    path('about/',aboutPage,name='aboutpage'),
     path('admin/', admin.site.urls),
     path('accounts/',include('accounts.urls')),
     path('site/',include('consumer.urls')),
