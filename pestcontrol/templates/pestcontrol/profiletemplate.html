@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body_block %}
+
+  <!--<div class="jumbotron">
+    {% if user_profile.plumber.profile_pic %}
+    <img src="{{ user_profile.plumber.profile_pic.url }}" alt="Not Found" style='height:220px'>
+    {% else  %}
+    <img src="{% static 'images/profile2.png' %}" alt="Not Found" style='height:220px'>
+    {% endif %}
+
+    <h3>Name: {{ user_profile.first_name }} {{ user_profile.last_name}}</h3>
+    <h4>Email: {{ user_profile.email }}</h4>
+    <h4>Phone: {{ user_profile.plumber.phone }}</h4>
+    <h4>Charges: {{user_profile.plumber.charges}} inr</h4>
+    <h4>City: {{user_profile.plumber.city }} </h4>
+    <h4>Area: {{user_profile.plumber.area}}</h4>
+    <h4>Address: {{user_profile.plumber.address}}</h4>
+    <h4>Avaliable from :{{user_profile.plumber.timeopen}} to {{user_profile.plumber.timeclose}}</h4>
+    <h4>Avaliable : {% if user_profile.plumber.is_avaliable %} Yes  {% else %} No {% endif %}</h4>
+
+  </div>
+  {% if user == user_profile %}
+  <a href="{% url 'plumber:updateprofile' %}" class="btn btn-warning">Update Profile </a>
+  {% endif %}-->
+
+
+  <div class="container">
+        <div class="row">
+
+          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+
+
+            <div class="panel panel-info">
+              <div class="panel-heading">
+
+
+                {% if user_profile.pestcontrol.company_name == 'Individual' %}
+                  <h3 class="panel-title">{{ user_profile.first_name|upper }} {{ user_profile.last_name|upper}}</h3>
+                {% else %}
+                <h3 class="panel-title">{{ user_profile.pestcontrol.company_name|upper }}</h3>
+                {% endif %}
+
+
+              </div>
+              <div class="panel-body">
+                <div class="row">
+                  {% if user_profile.pestcontrol.profile_pic %}
+                  <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="{{ user_profile.pestcontrol.profile_pic.url }}" class="img-circle img-responsive"> </div>
+                  {% else  %}
+                  <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="{% static 'images/profile2.png' %}" class="img-circle img-responsive"> </div>
+                  {% endif %}
+                  <div class=" col-md-9 col-lg-9 ">
+                    <table class="table table-user-information">
+                      <tbody>
+                        {% if user_profile.pestcontrol.company_name == 'Individual' %}
+                        <tr>
+                          <td>Profession</td>
+                          <td>{{user_profile.groups.all|first|upper}} Service</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                          <td>Contact Name</td>
+                          <td>{{ user_profile.first_name|upper }} {{ user_profile.last_name|upper}}</td>
+                        </tr>
+                        {% endif %}
+
+                        <tr>
+                          <td>Charges</td>
+                          <td>{{user_profile.pestcontrol.charges}} INR</td>
+                        </tr>
+                        <tr>
+                          <td>Avaliable</td>
+                          <td>{% if user_profile.pestcontrol.is_avaliable %} Yes  {% else %} No {% endif %}</td>
+                        </tr>
+
+                           <tr>
+                               <tr>
+                          <td>Working Hours</td>
+                          <td>{{user_profile.pestcontrol.timeopen}} to {{user_profile.pestcontrol.timeclose}}</td>
+                        </tr>
+                        <tr>
+                          <td>Area</td>
+                          <td>{{user_profile.pestcontrol.area|upper}}</td>
+                        </tr>
+                        <tr>
+                          <td>City</td>
+                          <td>{{user_profile.pestcontrol.city|upper}}</td>
+                        </tr>
+                        <tr>
+                          <td>Address</td>
+                          <td>{{user_profile.pestcontrol.address|upper}}</td>
+                        </tr>
+                        <tr>
+                          <td>Email</td>
+                          <td><a href="mailto:{{ user_profile.email }}">{{ user_profile.email }}</a></td>
+                        </tr>
+                        <tr>
+                          <td>Phone Number</td>
+                          <td>{{ user_profile.pestcontrol.phone }}</td>
+
+                        </tr>
+
+                      </tbody>
+                    </table>
+
+                    {% if user == user_profile %}
+                    <a href="{% url 'pestcontrol:updateprofile' %}" class="btn btn-primary">Edit Profile</a>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+{% endblock %}

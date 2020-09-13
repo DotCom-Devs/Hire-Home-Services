@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body_block %}
+
+  <div class="jumbotron">
+
+    <form enctype="multipart/form-data" method="post" id ='pestcontrolForm' data-areas-url="{% url 'ajax_load_cities' %}" class="form-inline">
+      {% csrf_token %}
+      {{ form }}
+      <input type="submit"  name = 'filter' value="submit" class="form-control">
+    </form>
+    <br>
+    {% if show_area %}
+      {% if pestcontrol_same_area %}
+      <div class="container">
+          <div class="row">
+              <div class="panel panel-primary filterable">
+                  <div class="panel-heading">
+                      <h3 class="panel-title text-center">List of Pestcontrol Services in {{user_area|upper }}, {{ user_city|upper }}</h3>
+
+                  </div>
+                  <table class="table">
+                      <thead>
+                          <tr class="filters">
+                              <th><h4>Name</h4></th>
+                              <th><h4>Company</h4></th>
+                              <th><h4>Working Time</h4></th>
+                              <th><h4>Phone</h4></th>
+                              <th><h4>Charges(INR)</h4></th>
+                              <th><h4>View Profile</h4></th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        {% for pestcontrol in pestcontrol_same_area %}
+                        <tr>
+                          <td>{{pestcontrol.user.first_name|upper}} {{pestcontrol.user.last_name|upper}}</td>
+                          <td>{{ pestcontrol.company_name }}</td>
+                          <td>{{pestcontrol.timeopen}} to {{pestcontrol.timeclose}}</td>
+                          <td>{{ pestcontrol.phone }}</td>
+                          <td>{{pestcontrol.charges}}</td>
+                          <td><a href="{% url 'pestcontrol:profile' pk=pestcontrol.user.pk %}">Profile</a></td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+
+      {% else %}
+        <h4>No Pestcontrol Services Found in {{user_area }}, {{ user_city }}</h4>
+      {% endif %}
+
+      {% if pestcontrol_same_city %}
+      <div class="container">
+          <div class="row">
+              <div class="panel panel-primary filterable">
+                  <div class="panel-heading">
+                      <h3 class="panel-title text-center">List of Pestcontrol Services in {{ user_city|upper }} </h3>
+
+                  </div>
+                  <table class="table">
+                      <thead>
+                          <tr class="filters">
+                              <th><h4>Name</h4></th>
+                              <th><h4>Company</h4></th>
+                              <th><h4>Area</h4></th>
+                              <th><h4>Working Time</h4></th>
+                              <th><h4>Phone</h4></th>
+                              <th><h4>Charges(INR)</h4></th>
+                              <th><h4>View Profile</h4></th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        {% for pestcontrol in pestcontrol_same_city %}
+                        <tr>
+                          <td>{{pestcontrol.user.first_name|upper}} {{pestcontrol.user.last_name|upper}}</td>
+                          <td>{{ pestcontrol.company_name }}</td>
+                          <td>{{pestcontrol.area|upper}}</td>
+                          <td>{{pestcontrol.timeopen}} to {{pestcontrol.timeclose}}</td>
+                          <td>{{ pestcontrol.phone }}</td>
+                          <td>{{pestcontrol.charges}}</td>
+                          <td><a href="{% url 'pestcontrol:profile' pk=pestcontrol.user.pk %}">Profile</a></td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+
+      {% else %}
+      <h4>No Pestcontrol Services Found in {{ user_city }}</h4>
+      {% endif %}
+    {% else %}
+      {% if pestcontrol_list %}
+      <div class="container">
+          <div class="row">
+              <div class="panel panel-primary filterable">
+                  <div class="panel-heading">
+                      <h4 class="panel-title text-center" >List of Pestcontrol Services in {{ user_city|upper }} </h4>
+
+                  </div>
+                  <table class="table">
+                      <thead>
+                          <tr class="filters">
+                              <th><h4>Name</h4></th>
+                              <th><h4>Company</h4></th>
+                              <th><h4>Area</h4></th>
+                              <th><h4>Working Time</h4></th>
+                              <th><h4>Phone</h4></th>
+                              <th><h4>Charges(INR)</h4></th>
+                              <th><h4>View Profile</h4></th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        {% for pestcontrol in pestcontrol_list %}
+                        <tr>
+                          <td>{{pestcontrol.user.first_name|upper}} {{pestcontrol.user.last_name|upper}}</td>
+                          <td>{{ pestcontrol.company_name }}</td>
+                          <td>{{pestcontrol.area|upper}}</td>
+                          <td>{{pestcontrol.timeopen}} to {{pestcontrol.timeclose}}</td>
+                          <td>{{ pestcontrol.phone }}</td>
+                          <td>{{pestcontrol.charges}}</td>
+                          <td><a href="{% url 'pestcontrol:profile' pk=pestcontrol.user.pk %}">Profile</a></td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+
+      {% else %}
+      <h4>No Pestcontrol Services Found in {{ user_city }}</h4>
+      {% endif %}
+    {% endif %}
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+  $("#id_city").change(function () {
+    console.log('non non non')
+      const url = $("#pestcontrolForm").attr("data-areas-url");  // get the url of the `load_cities` view
+
+      const cityId = $(this).val();  // get the selected country ID from the HTML input
+      //console.log(url)
+      $.ajax({                       // initialize an AJAX request
+          url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+          data: {
+              'city_id': cityId       // add the country id to the GET parameters
+          },
+          success: function (data) {   // `data` is the return of the `load_cities` view function
+
+              $("#id_area").html(data);  // replace the contents of the city input with the data that came from the server
+
+          }
+      });
+
+  });
+
+  //console.log($("#id_city").val());
+  if ($("#id_city").val() == "") {
+      const data = '<option value="">---------</option>'
+    $("#id_area").html(data);};
+</script>
+
+{% endblock %}

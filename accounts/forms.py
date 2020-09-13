@@ -13,7 +13,7 @@ class CreateUserForm(UserCreationForm):
 
 
 class UserTypeForm(forms.Form):
-	CHOICES = [('plumber', 'Plumber'), ('electrician', 'Electrician'),('carpenter','Carpenter')]
+	CHOICES = [('plumber', 'Plumber'), ('electrician', 'Electrician'),('carpenter','Carpenter'),('pestcontrol','Pest-Control')]
 	choice_field = forms.ChoiceField(choices=CHOICES)
 
 	def __init__(self, *args, **kwargs):

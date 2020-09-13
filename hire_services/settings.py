@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'electrician.apps.ElectricianConfig',
     'carpenter.apps.CarpenterConfig',
+    'pestcontrol.apps.PestcontrolConfig'
 ]
 
 MIDDLEWARE = [
