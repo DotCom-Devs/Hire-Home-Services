@@ -38,7 +38,7 @@ def populate_service_person(service,city,area,username):
     first_name = username
     last_name = fake.last_name_male()
     email = fake.ascii_free_email()
-    password = 'q1eer433'
+    password = 'qqaazzww11'
 
     try:
         user = User.objects.create_user(first_name = first_name,last_name = last_name,
