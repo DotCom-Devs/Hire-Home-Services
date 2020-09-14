@@ -2,6 +2,15 @@ from django import forms
 from .models import BasicProfile
 from django.core import validators
 from accounts.models import Area,City
+from django.contrib.auth.models import User
+
+class UpdateUser(forms.ModelForm):
+    first_name = forms.CharField(required = True)
+    email = forms.EmailField(required = True)
+    class Meta:
+        model = User
+        fields = ['first_name','last_name','email']
+
 
 def isphonenumber(value):
     if value.isdigit()==False or len(value)!=10:
@@ -14,6 +23,9 @@ class BasicProfileForm(forms.ModelForm):
         model = BasicProfile
         fields = ['phone','city','area','address','profile_pic',]
 
+        widgets = {
+          'address': forms.Textarea(attrs={'rows':2, 'cols':15}),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

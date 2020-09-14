@@ -19,7 +19,7 @@
       <div class="container">
         <ul class='nav navbar-nav'>
           <li><a class="navbar-brand" href="{% url 'home' %}">Home</a></li>
-          <li><a class='navbar-link' href="{% url 'admin:index' %}">Admin</a></li>
+
 
           {% if user.is_authenticated %}
             <li><a class='navbar-link' href="{% url 'accounts:profile' %}">Profile</a></li>
@@ -35,8 +35,8 @@
             <li><a class='navbar-link' href="{% url 'accounts:logout' %}">Logout</a></li>
           {% else %}
             <li><a class='navbar-link' href="{% url 'accounts:user_login' %}">Login</a></li>
-            <li><a class='navbar-link' href="{% url 'accounts:register' %}">Register</a></li>
-            <li><a class='navbar-link' href="{% url 'accounts:registerservice' %}">Register Service</a></li>
+            <li><a class='navbar-link' href="{% url 'accounts:register' %}">Register-User</a></li>
+            <li><a class='navbar-link' href="{% url 'accounts:registerservice' %}">Register-Service</a></li>
           {% endif %}
         </ul>
       </div>

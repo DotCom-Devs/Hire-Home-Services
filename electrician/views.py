@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404,reverse
 from .models import ElectricianProfile
-from .forms import ElectricianProfileForm, electricianFilter
+from .forms import ElectricianProfileForm, electricianFilter, UpdateUser
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse,HttpResponseRedirect
 from django.utils import timezone
@@ -42,11 +42,14 @@ def createBasicProfile(request):
 def updateBasicProfile(request):
     obj = get_object_or_404(ElectricianProfile,user = request.user)
     form = ElectricianProfileForm(instance = obj)
+    userobj = get_object_or_404(User,pk = request.user.pk)
+    userform = UpdateUser(instance = userobj)
     if request.method == 'POST':
         form = ElectricianProfileForm(request.POST,instance = obj)
-        if form.is_valid():
+        userform = UpdateUser(request.POST,instance = userobj)
+        if form.is_valid() and userform.is_valid():
             profile = form.save(commit=False)
-
+            userform.save()
             if 'profile_pic' in request.FILES:
                 profile.profile_pic = request.FILES['profile_pic']
             profile.user = request.user
@@ -56,7 +59,7 @@ def updateBasicProfile(request):
             #lastUpdateEntry.update_date=timezone.now().date()
             #lastUpdateEntry.save()
             return  HttpResponseRedirect(reverse('home'))
-    context = {'form':form}
+    context = {'form':form,'userform':userform}
     return render(request, 'electrician/updateprofile.html', context)
 
 

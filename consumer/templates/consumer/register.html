@@ -5,17 +5,21 @@
 
   <div class="jumbotron">
 
-    <h2>
+    <h2 class="text-center">
       {% if form.instance.pk %}
-        Update Profile:
+        Update Profile for {{ userform.instance.username}}:
       {% else %}
         Create Complete Profile First:
       {% endif %}
 
     </h2>
+    <hr>
 
       <form enctype="multipart/form-data" method="post" id ='consumerForm' data-areas-url="{% url 'ajax_load_cities' %}">
         {% csrf_token %}
+        {% if form.instance.pk %}
+          {% bootstrap_form userform %}
+        {% endif %}
         {% bootstrap_form form %}
         <input type="submit"  value="Update Profile">
       </form>
