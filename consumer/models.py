@@ -9,7 +9,7 @@ class BasicProfile(models.Model):
     #city = models.CharField(max_length=100)
     #area = models.CharField(max_length=100)
     #address = models.TextField(max_length=200)
-    
+
     city = models.ForeignKey(City, on_delete=models.SET_NULL, blank=False, null=True)
     area = models.ForeignKey(Area, on_delete=models.SET_NULL, blank=False, null=True)
     address = models.TextField(max_length=200, blank=False)
@@ -18,4 +18,4 @@ class BasicProfile(models.Model):
 
 
     def __str__(self):
-        return self.user.username +' '+self.city
+        return self.user.username +' '+self.city.name
