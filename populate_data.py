@@ -38,7 +38,7 @@ def populate_service_person(service,city,area,username):
     first_name = username
     last_name = fake.last_name_male()
     email = fake.ascii_free_email()
-    password = 'qqaazzww11'
+    password = 'q1eer433'
 
     try:
         user = User.objects.create_user(first_name = first_name,last_name = last_name,
@@ -72,7 +72,7 @@ def populate_service_person(service,city,area,username):
 
     elif service.name == 'pestcontrol':
         charges = random.randint(200, 300)
-        company = [first_name +' '+fake.company_suffix(),'']
+        company = [first_name +' '+fake.company_suffix(),'Individual']
         company = company[random.randint(0,1)]
         pestcontrol_profile = PestcontrolProfile.objects.get_or_create(user=user,company_name=company,phone=phone,city=city,
                                                                area=area,address=address,
