@@ -21,6 +21,8 @@ $ python populate_cities.py
 #populate fake service-providers like plumbers,carpenters etc.
 #not mandatory 
 $ python populate_data.py
+# to run server
+$ python manage.py runserver
 ```
 Now go to http://127.0.0.1:8000/
 
