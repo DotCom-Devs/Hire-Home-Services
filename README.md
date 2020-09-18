@@ -2,7 +2,7 @@
 Web app that helps people to find handymen like plumber, electrician, etc in their nearby area based on their
 availability.
 
-##Software Requirements
+## Software Requirements
 - Python 3.6 or higher 
 
 ## Setup
